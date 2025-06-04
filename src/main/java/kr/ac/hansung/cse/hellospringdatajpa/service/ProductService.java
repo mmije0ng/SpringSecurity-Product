@@ -8,28 +8,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ProductService {
 
     @Autowired
-    private ProductRepository repo;
+    private ProductRepository productRepository;
 
-    public Product get(long id) {
-        return repo.findById(id)
+    public List<Product> findAllProducts() {
+        return productRepository.findAll();
+    }
+
+    public Product findProductById(Long id) {
+        return productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Product not found with id: " + id));
     }
 
-    public List<Product> listAll() {
-        return repo.findAll();
+    @Transactional
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
     }
 
-    public void save(Product product) {
-        repo.save(product);
-    }
-
-    public void delete(long id) {
-        repo.deleteById(id);
+    @Transactional
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 }
