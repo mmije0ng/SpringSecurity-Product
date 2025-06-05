@@ -5,6 +5,7 @@ import kr.ac.hansung.cse.hellospringdatajpa.entity.RoleType;
 import kr.ac.hansung.cse.hellospringdatajpa.entity.User;
 import kr.ac.hansung.cse.hellospringdatajpa.repo.RoleRepository;
 import kr.ac.hansung.cse.hellospringdatajpa.repo.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class UserService {
@@ -41,7 +43,8 @@ public class UserService {
         user.addRole(mainRole);
 
         // 관리자라면 사용자 권한도 함께 부여
-        if (roleType == RoleType.ROLE_ADMIN) {
+        if (roleType.equals( RoleType.ROLE_ADMIN)) {
+            log.info("ADMIN으로 가입하여 사용자 권한 추가");
             Role userRole = roleRepository.findByRoleType(RoleType.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("ROLE_USER 권한이 존재하지 않습니다."));
             user.addRole(userRole);

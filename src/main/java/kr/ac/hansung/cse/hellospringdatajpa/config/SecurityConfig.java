@@ -45,7 +45,7 @@ public class SecurityConfig {
                 // 로그인 설정
                 .formLogin(form -> form
                         .loginPage("/login") // 사용자 정의 로그인 페이지 경로
-                        .defaultSuccessUrl("/products", true) // 로그인 성공 시 이동할 기본 페이지
+                        .defaultSuccessUrl("/", true) // 로그인 성공 시 이동할 기본 페이지
                         .failureUrl("/login?error=true") // 로그인 실패 시 이동할 페이지
                         .permitAll() // 로그인 페이지는 모두 접근 가능
                 )

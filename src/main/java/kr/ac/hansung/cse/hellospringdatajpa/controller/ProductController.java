@@ -45,6 +45,28 @@ public class ProductController {
         return "product/edit_product";
     }
 
+    @PostMapping("/update/{id}")
+    public String updateProduct(@PathVariable Long id,
+                                @Valid @ModelAttribute("product") Product product,
+                                BindingResult bindingResult,
+                                Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "product/edit_product";
+        }
+
+        // 기존 상품 불러오기
+        Product existingProduct = productService.findProductById(id);
+        existingProduct.setName(product.getName());
+        existingProduct.setBrand(product.getBrand());
+        existingProduct.setMadeIn(product.getMadeIn());
+        existingProduct.setPrice(product.getPrice());
+
+        productService.saveProduct(existingProduct); // 수정 저장
+
+        return "redirect:/products";
+    }
+
     // @ModelAttribute는  Form data (예: name=Laptop&brand=Samsung&madeIn=Korea&price=1000.00)를 Product 객체
     // @RequestBody는 HTTP 요청 본문에 포함된
     //  JSON 데이터(예: {"name": "Laptop", "brand": "Samsung", "madeIn": "Korea", "price": 1000.00})를 Product 객체에 매핑
